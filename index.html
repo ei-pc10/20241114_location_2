@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Location-based AR.js demo</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <a-scene vr-mode-ui="enabled: false" embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        <!-- カラフルで統一感のある正方形モデル -->
+        <a-box id="modelEntity" 
+               position="0 0 -5" 
+               scale="0.6 0.6 0.6" 
+               visible="false"
+               look-at="[camera]"
+               material="color: #C0C0C0; shader: flat; 
+                         src: https://i.imgur.com/tx8nV7M.jpg;"  <!-- 統一感あるカラーパターン画像 -->
+               animation-mixer>
+        </a-box>
+
+        <!-- カメラと位置情報 -->
+        <a-camera gps-camera rotation-reader gps-scale="fixed: true;"></a-camera>
+    </a-scene>
+
+    <script>
+        // 特定の表示位置（緯度と経度）
+        const targetLatitude = 37.95623964531757; //短大
+        const targetLongitude = 139.3371717973987;
+        const modelEntity = document.getElementById('modelEntity');
+        
+        // Android判定
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const scale = isAndroid ? 0.5 : 0.6;  // Androidの場合はスケールを0.5に設定
+
+        // スケールを適用
+        modelEntity.object3D.scale.set(scale, scale, scale);
+
+        // 距離計算用の関数
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371000; // 地球の半径（メートル）
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        // 位置情報を取得し、モデルを表示するかどうかを判定
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const userLatitude = position.coords.latitude;
+                const userLongitude = position.coords.longitude;
+
+                // 指定の位置との距離を計算
+                const distance = calculateDistance(userLatitude, userLongitude, targetLatitude, targetLongitude);
+                
+                // 10メートル以内にいる場合にモデルを表示
+                if (distance <= 10) {
+                    modelEntity.setAttribute('gps-entity-place', `latitude: ${targetLatitude}; longitude: ${targetLongitude};`);
+                    modelEntity.setAttribute('visible', 'true');
+                    console.log("指定位置に近いため、モデルを表示します。");
+                } else {
+                    console.log("指定位置から離れているため、モデルは表示されません。");
+                }
+            }, function(error) {
+                console.error("位置情報の取得に失敗しました:", error);
+            });
+        } else {
+            console.error("このブラウザでは位置情報がサポートされていません");
+        }
+    </script>
+</body>
+</html>
