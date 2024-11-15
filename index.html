@@ -59,13 +59,13 @@
             return R * c;
         }
 
-
         console.log("これからif文の中に入ります。");
 
         // 位置情報を取得し、モデルを表示するかどうかを判定
         if ("geolocation" in navigator) {
             console.log("if文のなかに入りました。");
-            navigator.geolocation.getCurrentPosition(function(position) {
+            navigator.geolocation.watchPosition(function(position) {
+
                 console.log("functionの中に入りました。");
                 const userLatitude = position.coords.latitude;
                 const userLongitude = position.coords.longitude;
@@ -86,7 +86,7 @@
             }, function(error) {
                 console.log("位置情報の取得に失敗しました:");
                 alert("位置情報の取得に失敗しました:", error);
-            });
+            }, { enableHighAccuracy: true, maximumAge: 0, timeout: 100, frequency: 100 });
         } else {
             console.log("このブラウザでは位置情報がサポートされていません");
             alert("このブラウザでは位置情報がサポートされていません");
