@@ -86,7 +86,7 @@
             }, function(error) {
                 console.log("位置情報の取得に失敗しました:");
                 alert("位置情報の取得に失敗しました:", error);
-            }, { enableHighAccuracy: true, maximumAge: 0, timeout: 100, frequency: 100 });
+            }, { enableHighAccuracy: true, maximumAge: 0, timeout: 1000 });
         } else {
             console.log("このブラウザでは位置情報がサポートされていません");
             alert("このブラウザでは位置情報がサポートされていません");
