@@ -23,7 +23,7 @@
         </a-entity>
 
         <!-- カメラと位置情報 -->
-        <a-camera gps-camera rotation-reader gps-scale="fixed: true;"></a-camera>
+        <a-camera gps-camera="minDistance:5; maxDistance:50"></a-camera>
     </a-scene>
 
     <script>
