@@ -74,7 +74,7 @@
                 const distance = calculateDistance(userLatitude, userLongitude, targetLatitude, targetLongitude);
                  
                 // 100メートル以内にいる場合にモデルを表示
-                if (distance <= 20) {
+                if (distance <= 30) {
                     modelEntity.setAttribute('gps-entity-place', `latitude: ${targetLatitude}; longitude: ${targetLongitude};`);
                     modelEntity.setAttribute('visible', 'true');
                     console.log("指定位置に近いため、モデルを表示します。");
@@ -83,9 +83,9 @@
                     console.log("指定位置から離れているため、モデルは表示されません。");
                     alert("指定位置から離れているため、モデルは表示されません。");
                 }
-            }, function(error) {
-                console.log("位置情報の取得に失敗しました:");
-                alert("位置情報の取得に失敗しました:", error);
+            },  function(error) {
+                console.log("位置情報の取得に失敗しました:", error);
+                alert("位置情報の取得に失敗しました:" + error.message);
             }, { enableHighAccuracy: true, maximumAge: 0, timeout: 1000 });
 
         } else {
