@@ -54,7 +54,9 @@
 
         // 位置情報を取得し、モデルを表示するかどうかを判定
         if ("geolocation" in navigator) {
+            connsole.log("if文の中に入りました。");
             navigator.geolocation.getCurrentPosition(function(position) {
+                console.log("functionの中に入りました。");
                 const userLatitude = position.coords.latitude;
                 const userLongitude = position.coords.longitude;
 
