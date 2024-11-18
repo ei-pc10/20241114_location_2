@@ -16,7 +16,7 @@
         <a-entity id="modelEntity" 
                   gltf-model="https://raw.githubusercontent.com/ei-pc10/hitomania_3d/main/model.glb" 
                   position="-5 -5 -5" 
-                  scale="0.6 0.6 0.6"
+                  scale="0.3 0.3 0.3"
                   look-at="[camera]"
                   visible="false"
                   animation-mixer>
@@ -34,7 +34,7 @@
         
         // Android判定
         const isAndroid = /Android/i.test(navigator.userAgent);
-        const scale = isAndroid ? 0.5 : 0.6;  // Androidの場合はスケールを0.5に設定
+        const scale = isAndroid ? 0.4 : 0.3;  // Androidの場合はスケールを0.4に設定
 
 
         if(isAndroid){
@@ -70,10 +70,16 @@ navigator.geolocation.watchPosition(function(position) {
                 const userLatitude = position.coords.latitude;
                 const userLongitude = position.coords.longitude;
 
+
+                console.log(`緯度:${userLatitude}`);
+                console.log(`経度:${userLongitude}`);
+
+                
+    
                     // 指定の位置との距離を計算
                 const distance = calculateDistance(userLatitude, userLongitude, targetLatitude, targetLongitude);
                  
-                // 100メートル以内にいる場合にモデルを表示
+                // 70メートル以内にいる場合にモデルを表示
                 if (distance <= 70) {
                     modelEntity.setAttribute('gps-entity-place', `latitude: ${targetLatitude}; longitude: ${targetLongitude};`);
                     modelEntity.setAttribute('visible', 'true');
