@@ -60,7 +60,7 @@
 
                 const distance = calculateDistance(userLatitude, userLongitude, targetLatitude, targetLongitude);
 
-                if (distance <= 70) {
+                if (distance <= 500) {
                     modelEntity.setAttribute('gps-entity-place', `latitude: ${targetLatitude}; longitude: ${targetLongitude};`);
                     modelEntity.setAttribute('visible', 'true');
                     console.log("モデルを表示しました");
